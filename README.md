@@ -74,3 +74,10 @@ Merge query as it name suggests merges floating event type stream with the EP ru
 It is also possible to use Select query to filter out events and trigger Java listener class functions. Once Select returns the result with given conditions, result become available to use by Listener class function as function parameter via callback by Esper. You do it by adding listener to your statements. Your listener class should implement `com.espertech.esper.client.UpdateListener`
 
 It might be good idea to start stream analysis with Select query and capture only valid events then do enrichment if needed inside Listener update functions and send back to stream as internal events to make it available for other EPL statements. 
+
+```
+String eventSelectQuery = "@Resilient @Audit SELECT UOWACC, MESSAGE, ACTION_NAME FROM EVENT_INTERNAL_EVENT";
+EPStatement epStatement3 = cep.getEngine().getEPAdministrator().createEPL(eventSelectQuery, "QUERY_ACTION");
+statements.add(epStatement3);
+epStatement3.addListener(new ListenerImpl());
+```
