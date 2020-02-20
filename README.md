@@ -70,7 +70,7 @@ Merge query as it name suggests merges floating event type stream with the EP ru
           + " SELECT E.UOWACC AS UOWACC, VAR_MESSAGE_TXT AS MESSAGE, 'SMS_COUNT_' || CAST(TRX_COUNT+1, STRING) AS ACTION_NAME
 ```
 
-### 4. Select Query
+### 5. Select Query
 It is also possible to use Select query to filter out events and trigger Java listener class functions. Once Select returns the result with given conditions, result become available to use by Listener class function as function parameter via callback by Esper. You do it by adding listener to your statements. Your listener class should implement `com.espertech.esper.client.UpdateListener`
 
 It might be good idea to start stream analysis with Select query and capture only valid events then do enrichment if needed inside Listener update functions and send back to stream as internal events to make it available for other EPL statements. 
@@ -82,7 +82,7 @@ statements.add(epStatement3);
 epStatement3.addListener(new ListenerImpl());
 ```
 
-### 5. Listener 
+### 6. Listener 
 You can register Listener or in other words callback function to your EPL Select statements at final stage or at the begining of analysis to do data enrichment. By means of registered callback function, you can call another API or REST web service execute to final phase business logic such as sending alarm notification, triggering cashback or promotion system etc.
 
 ```
@@ -91,3 +91,7 @@ You can register Listener or in other words callback function to your EPL Select
 
   }
 ```
+
+### 7. On Demand Query 
+Esper Runtime supports on-demand queries by means of its `epRuntime.prepareQuery(query)` function. Using prepareQuery function it is possible to write SQL queries to do data manipulation on EP Runtime tables. This query functionality can be used for real time reporting/statistics or high availability purposes to take the snapshoot of EP Runtime tables.
+
