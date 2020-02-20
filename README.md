@@ -1,6 +1,6 @@
 # esper-stream-poc
 
-In this proof of concept, I wanted to provide full working stream analytics application which implements sample business logic.  It is the Java Spring Boot application using Esper SDK, Kafka Client Consumer API, Spring Rest Template and Spring Security API. 
+In this proof of concept, I wanted to provide full working stream analytics application which implements sample business logic.  It is the Java Spring Boot application using Esper SDK, Kafka Client Consumer API, Spring Rest Template and Spring Security API. Here are links for Esper [datasheet](http://static.espertech.com/EsperTech%20technical%20datasheet.pdf) and [reference](http://www.espertech.com/esper/esper-documentation/) documents
 
 ### Prerequisities 
 
@@ -8,6 +8,10 @@ In this proof of concept, I wanted to provide full working stream analytics appl
 * Project needs MySQL database to authenticate API user using Basic Auth to access Rest endpoint.
 * Knowledge about Zookeeper and Kafka to start and manage basic operational level
 * Basic knowledge about using Kafka command line apps(Kafka Topics, Kafka Console Producer/Consumer)
+
+### About POC application
+Java application provided has standard Spring Boot App structure. To make conceptual development/testing easier and faster , full stream analysis model creation done in Main function of app. Application supports listening events from event sources via either plain socket connection(EventListener) or EsperIOKafkaInputProcessor as plain text of character array. App also exposes Rest service to execute on demand queries entered as Rest service body and return response as Json DTO.
+
 
 ### 1. Adding Event Types
 Events are defining the data structure format as Hashmap with the event name. Once the events are sent to Esper run-time , they become available for filtering by EPL statements that were already registered and started before sending events. EPL statement can also produce another events by inserting event parameters to event as SQL Insert statement to make it possible event driven communication with other EPL statements.
