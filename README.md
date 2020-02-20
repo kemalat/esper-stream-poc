@@ -81,3 +81,13 @@ EPStatement epStatement3 = cep.getEngine().getEPAdministrator().createEPL(eventS
 statements.add(epStatement3);
 epStatement3.addListener(new ListenerImpl());
 ```
+
+### 5. Listener 
+You can register Listener or in other words callback function to your EPL Select statements at final stage or at the begining of analysis to do data enrichment. By means of registered callback function, you can call another API or REST web service execute to final phase business logic such as sending alarm notification, triggering cashback or promotion system etc.
+
+```
+  @Override
+  public void update(EventBean[] eventBeans, EventBean[] eventBeans1) {
+
+  }
+```
