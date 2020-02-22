@@ -6,8 +6,63 @@ In this proof of concept, I wanted to provide full working stream analytics appl
 
 * Install Confluent if you do not have Kafka on your local environment.
 * Project needs MySQL database to authenticate API user using Basic Auth to access Rest endpoint.
+* Good knowledge and understanding about SQL
 * Knowledge about Zookeeper and Kafka to start and manage basic operational level
 * Basic knowledge about using Kafka command line apps(Kafka Topics, Kafka Console Producer/Consumer)
+
+### Kafka Message Queue
+In this demonstration I used, Confluent package which comes with required Kafka components with ready use start/stop scripts. We need to start zookeeper and kafka server at least to make the message queue ready.  Zookeeper acts as a centralized service and is used to keep track of status of the Kafka cluster nodes, topics and partitions etc. In short we can say that High availability of Kafka messaging queue in distributed architecture managed and achieved by Zookeeper. Kafka as distributed streaming platform performs publishing and subscribing to streams of records, similar to a message queue or enterprise messaging systems. It stores streams of records in a fault-tolerant durable way and processes streams of records as they occur. 
+
+```
+cd etc/confluent-5.3.2/bin/
+./bin/zookeeper-server-start ./etc/kafka/zookeeper.properties
+./bin/kafka-server-start ./etc/kafka/server.properties
+```
+#### Create topic and produce events
+
+```
+./kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic tweet
+echo "EVENT_UOWDATAPF,UOWACC,100,UOWAMA,200" | ./kafka-console-producer --broker-list localhost:9092 --topic tweet > /dev/null
+```
+### Esper Engine Initialization
+Esper initialization is done by `initializeEngine()` function of `EsperInitializer` class. 
+Excerpt from `application.properties` related to Esper Engine Initialization
+
+```
+esper.name=esper-core
+esper.sdk.name=ESPER
+esper.sdk.version=1.0.0
+
+#Server Socket port to wait connection and events
+event.listener.port=5432
+event.listener.ip=0.0.0.0
+
+#Enable/Disable logging for EPL statements. 
+statement.audit.enabled=true
+
+#JDBC connectivity to Esper Engine
+esper.jdbc.enabled=true
+esper.jdbc.port=8450
+esper.jdbc.processorCount=1
+esper.jdbc.sessionIdleTimeout=600
+
+
+#Configuring Esper Kafka Consumer to find out Kafka Bootstrap and relevant topic for consuming event types
+esper.kafka.enabled=true
+esper.kafka.bootstrap.servers=localhost:9092
+esper.kafka.consumer.group.id=consumerGroup1
+esper.kafka.consumer.client.id=eyeflex
+esper.kafka.consumer.offset=earliest
+esper.kafka.topics=tweet
+
+# Esper engine places inbound events in a queue for processing  by number of created threads
+# engine-managed threads other than the delivering application threads
+esper.worker.inboundThreadSize=2
+
+# Esper engine places outbound events in a queue for delivery by number of created threads
+# engine-managed threads other than the processing thread originating the result.
+esper.worker.outboundThreadSize=2
+```
 
 ### About POC application
 Java application provided has standard Spring Boot App structure. To make conceptual development/testing easier and faster , full stream analysis model creation done in Main function of app. Application supports listening events from event sources via either plain socket connection(EventListener) or EsperIOKafkaInputProcessor as plain text of character array. App also exposes Rest service to execute on demand queries entered as Rest service body and return response as Json DTO.
