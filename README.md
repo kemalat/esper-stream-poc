@@ -13,12 +13,18 @@ In this proof of concept, I wanted to provide full working stream analytics appl
 ### Kafka Message Queue
 In this demonstration I used, Confluent package which comes with required Kafka components with ready use start/stop scripts. We need to start zookeeper and kafka server at least to make the message queue ready.  Zookeeper acts as a centralized service and is used to keep track of status of the Kafka cluster nodes, topics and partitions etc. In short we can say that High availability of Kafka messaging queue in distributed architecture managed and achieved by Zookeeper. Kafka as distributed streaming platform performs publishing and subscribing to streams of records, similar to a message queue or enterprise messaging systems. It stores streams of records in a fault-tolerant durable way and processes streams of records as they occur. 
 
+### Start up commands for zookeeper and kafka
+Please follow the instructions on this [link](https://docs.confluent.io/current/quickstart/ce-quickstart.html)
+You can start required processses with their default configuration without changing the property files.
+
 ```
 cd etc/confluent-5.3.2/bin/
 ./bin/zookeeper-server-start ./etc/kafka/zookeeper.properties
 ./bin/kafka-server-start ./etc/kafka/server.properties
 ```
 #### Create topic and produce events
+
+After creating the topic with the name which is matching with `esper.kafka.topics` property in `application.properties`, you are good to go for pushing event the thi topic as shown below. 
 
 ```
 ./kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic tweet
