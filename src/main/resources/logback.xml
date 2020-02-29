@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%t] %highlight(%-5level)  %cyan(%logger{36}.%M\(%line\)) - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+
+  <appender class="ch.qos.logback.core.FileAppender" name="APP">
+    <file>logs/app.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.core.FileAppender" name="ERROR">
+    <file>logs/err.log</file>
+    <append>true</append>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <encoder>
+      <pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.core.FileAppender" name="ESPER">
+    <file>logs/esper.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger additivity="false" level="ERROR" name="org.springframework">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger additivity="false" level="DEBUG" name="com.voida.eyeflex">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger additivity="false" level="DEBUG" name="com.voida.action">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger level="INFO" name="com.espertech.esper" additivity="false">
+    <appender-ref ref="ESPER"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger level="INFO" name="org.apache.kafka" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger additivity="false" level="ERROR" name="org.quartz">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger additivity="false" level="ERROR" name="org.hibernate">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <logger additivity="false" level="ERROR" name="com.zaxxer.hikari">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </logger>
+
+  <root level="DEBUG">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP"/>
+    <appender-ref ref="ERROR"/>
+  </root>
+
+
+</configuration>
