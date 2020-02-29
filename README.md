@@ -18,10 +18,30 @@ Please follow the instructions on this [link](https://docs.confluent.io/current/
 You can start required processses with their default configuration without changing the property files.
 
 ```
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home
+export CONFLUENT_CLI=/Users/kemalatik/etc/confluent-cli
+export CONFLUENT_HOME=/Users/kemalatik/etc/confluent-5.3.2
+export PATH="${CONFLUENT_HOME}/bin:$PATH"
+export PATH="${CONFLUENT_CLI}/bin:$PATH"
+
 cd etc/confluent-5.3.2/bin/
-./bin/zookeeper-server-start ./etc/kafka/zookeeper.properties
-./bin/kafka-server-start ./etc/kafka/server.properties
+./confluent local start kafka
 ```
+Expected Output after *confluent local start kafka*
+```
+Updates are available for confluent. To install them, please run:
+$ confluent update
+
+    The local commands are intended for a single-node development environment
+    only, NOT for production usage. https://docs.confluent.io/current/cli/index.html
+
+Using CONFLUENT_CURRENT: /var/folders/9d/8tj1tdgx4tvbq4rmr4xdtfkr0000gp/T/confluent.2DtODZcO
+Starting zookeeper
+zookeeper is [UP]
+Starting kafka
+kafka is [UP]
+```
+
 #### Create topic and produce events
 
 After creating the topic with the name which is matching with `esper.kafka.topics` property in `application.properties`, you are good to go for pushing event the thi topic as shown below. 
